@@ -52,7 +52,7 @@ module API
                   desc: offer.short_desc,
                   category: offer.coupon_category.name,
                   users: [1500, 2798, 4263, 7564, 76412, 82164, 1600, 7324, 9896, 9410, 4315].sample.to_s,
-                  success: "#{[52, 65, 78, 95, 84, 75, 63, 99, 100, 88, 69].sample.to_s} %",
+                  success: "#{[52, 65, 78, 95, 84, 75, 63, 99, 100, 88, 69].sample.to_s}%",
                 }
               end
               res = { status: 200, message: MSG_SUCCESS, appBanners: appBanners || [], topCategories: topCategories || [], topStores: topStores || [], specialOffer: specialOffer || {}, topOffers: topOffers || [] }
@@ -133,7 +133,7 @@ module API
                   cashback: offerDetail.payout_cashback,
                   steps: offerDetail.long_desc,
                   users: [1500, 2798, 4263, 7564, 76412, 82164, 1600, 7324, 9896, 9410, 4315].sample.to_s,
-                  success: "#{[52, 65, 78, 95, 84, 75, 63, 99, 100, 88, 69].sample.to_s} %",
+                  success: "#{[52, 65, 78, 95, 84, 75, 63, 99, 100, 88, 69].sample.to_s}%",
                   minOrder: [50, 100, 150, 200, 250, 300, 350, 400, 450, 500].sample.to_s,
                   maxCashback: [500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000].sample.to_s,
                   saleTrack: [12, 18, 3, 6, 7, 19, 25, 30].sample.to_s,
@@ -203,6 +203,98 @@ module API
             end
           rescue Exception => e
             log = "API Exception - #{Time.now} - offerDetail - #{params.inspect} - Error - #{e}"
+            Rails.logger.info log
+            LogsHelper.logs(log, request)
+            { status: 200, message: MSG_ERROR, error: e }
+          end
+        end
+      end
+
+      resource :storesList do
+        before { api_params }
+
+        params do
+          use :common_params
+        end
+
+        post do
+          begin
+            user = valid_user(params[:userId], params[:securityToken])
+            if user.present?
+              couponStores = []
+              stores = CouponStore.active
+              stores.each do |store|
+                couponStores << {
+                  image: store.img_url,
+                  title: store.name,
+                  desc: store.cashback,
+                  status: "Activate Cashback",
+                }
+              end
+              res = { status: 200, message: MSG_SUCCESS, stores: couponStores || [] }
+              LogsHelper.logs(res, request)
+              return res
+            else
+              res = { status: 500, message: "User Not Found" }
+              LogsHelper.logs(res, request)
+              return res
+            end
+          rescue Exception => e
+            log = "API Exception - #{Time.now} - storesList - #{params.inspect} - Error - #{e}"
+            Rails.logger.info log
+            LogsHelper.logs(log, request)
+            { status: 200, message: MSG_ERROR, error: e }
+          end
+        end
+      end
+
+      resource :storeDetail do
+        before { api_params }
+
+        params do
+          use :common_params
+          requires :storeId, type: String, allow_blank: false
+        end
+
+        post do
+          begin
+            user = valid_user(params[:userId], params[:securityToken])
+            if user.present?
+              storeDetail = CouponStore.find_by(id: params[:storeId])
+              if storeDetail.present?
+                offers = []
+                storeDetail.coupon_offers.active.each do |offer|
+                  offers << {
+                    id: offer.id,
+                    cashback: offer.payout_cashback,
+                    desc: offer.short_desc,
+                    users: [1500, 2798, 4263, 7564, 76412, 82164, 1600, 7324, 9896, 9410, 4315].sample.to_s,
+                    success: "#{[52, 65, 78, 95, 84, 75, 63, 99, 100, 88, 69].sample.to_s}%",
+                  }
+                end
+                storeDetails = {
+                  image: storeDetail.img_url,
+                  title: storeDetail.name,
+                  shareUrl: "www.google.com",
+                  cashback: storeDetail.cashback,
+                  trackTime: "24 hours",
+                  offers: offers,
+                }
+                res = { status: 200, message: MSG_SUCCESS, storeDetails: storeDetails || {} }
+                LogsHelper.logs(res, request)
+                return res
+              else
+                res = { status: 500, message: "Store Not Found" }
+                LogsHelper.logs(res, request)
+                return res
+              end
+            else
+              res = { status: 500, message: "User Not Found" }
+              LogsHelper.logs(res, request)
+              return res
+            end
+          rescue Exception => e
+            log = "API Exception - #{Time.now} - storeDetail - #{params.inspect} - Error - #{e}"
             Rails.logger.info log
             LogsHelper.logs(log, request)
             { status: 200, message: MSG_ERROR, error: e }
