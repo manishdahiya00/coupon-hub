@@ -1,0 +1,45 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  coupon_store: one
+  coupon_category: one
+  coupon_sub_category: one
+  status: MyString
+  short_desc: MyString
+  long_desc: MyString
+  country: MyString
+  payout_type: MyString
+  shop_type: MyString
+  payout_cashback: MyString
+  income_cashback: MyString
+  offer_type: MyString
+  img_url: MyString
+  action_url: MyString
+  hindi_desc: MyString
+  currency: MyString
+  priority: MyString
+  code_show_text: MyString
+  code_show_value: MyString
+
+two:
+  name: MyString
+  coupon_store: two
+  coupon_category: two
+  coupon_sub_category: two
+  status: MyString
+  short_desc: MyString
+  long_desc: MyString
+  country: MyString
+  payout_type: MyString
+  shop_type: MyString
+  payout_cashback: MyString
+  income_cashback: MyString
+  offer_type: MyString
+  img_url: MyString
+  action_url: MyString
+  hindi_desc: MyString
+  currency: MyString
+  priority: MyString
+  code_show_text: MyString
+  code_show_value: MyString

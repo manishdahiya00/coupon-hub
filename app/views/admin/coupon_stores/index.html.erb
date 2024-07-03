@@ -1,0 +1,57 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">Listing Coupon Stores</h2>
+      </div>
+      <div class="col-lg-12 text-right">
+        <%= link_to 'New Store', new_admin_coupon_store_path, class: 'btn btn-primary', style: 'margin-bottom: 10px;' %>
+      </div>
+      <% if @stores.present? %>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Store Name</th>
+              <th>Store Image</th>
+              <th>Category Name</th>
+              <th>Category Name</th>
+              <th>Status</th>
+              <th>Date Time</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @stores.each do |store| %>
+              <tr>
+                <td><%= store.id %></td>
+                <td><%= store.name %></td>
+                <td><img style="width:40px;" src="<%=store.try(:img_url)%>" onerror="this.onerror=null;this.src='https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png';" /></td>
+                <td><%= store.coupon_category.name %></td>
+                <td><%= store.cashback %></td>
+                <td>
+                  <% if store.status == "active" %>
+                    <img style="width:20px;" src="https://cdn.pixabay.com/photo/2012/04/24/12/40/ticks-39830_960_720.png" />
+                  <% else %>
+                    <img style="width:20px;" src="https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png" />
+                  <% end %>
+                </td>
+                <td><%= store.created_at.strftime("%d/%m/%y %I:%M %p") %></td>
+                <td>
+                  <div style="display:flex;gap:5px;">
+                    <%= link_to 'Edit', edit_admin_coupon_store_path(store),class: 'btn btn-primary btn-sm' %>
+                    <%= button_to 'Delete', admin_coupon_store_path(store), method: :delete,class: 'btn btn-danger btn-sm' %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @stores %>
+      <% else %>
+        <h1 class="not-found">No Coupon store Found</h1>
+      <% end %>
+    </div>
+  </div>
+</div>

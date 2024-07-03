@@ -1,0 +1,54 @@
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">Listing Coupon Categories</h2>
+      </div>
+      <div class="col-lg-12 text-right">
+        <%= link_to 'New Category', new_admin_coupon_category_path, class: 'btn btn-primary', style: 'margin-bottom: 10px;' %>
+      </div>
+      <% if @categories.present? %>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Coupon Name</th>
+              <th>Coupon Image</th>
+              <th>Status</th>
+              <th>Date Time</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @categories.each do |category| %>
+              <tr>
+                <td><%= category.id %></td>
+                <td><%= category.name %></td>
+                <td><img style="width:40px;" src="<%=category.try(:img_url)%>" onerror="this.onerror=null;this.src='https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png';" /></td>
+                <td>
+                  <% if category.status == "active" %>
+                    <img style="width:20px;" src="https://cdn.pixabay.com/photo/2012/04/24/12/40/ticks-39830_960_720.png" />
+                  <% else %>
+                    <img style="width:20px;" src="https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png" />
+                  <% end %>
+                </td>
+                <td><%= category.created_at.strftime("%d/%m/%y %I:%M %p") %></td>
+                <td>
+                  <div style="display:flex;gap:5px;">
+                    <%= link_to 'Sub categories', admin_coupon_category_coupon_sub_categories_path(category),class: 'btn btn-default btn-sm' %>
+                    <%= link_to 'Edit', edit_admin_coupon_category_path(category),class: 'btn btn-primary btn-sm' %>
+                    <%= button_to 'Delete', admin_coupon_category_path(category), method: :delete,class: 'btn btn-danger btn-sm' %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @categories %>
+      <% else %>
+        <h1 class="not-found">No Coupon Category Found</h1>
+      <% end %>
+    </div>
+  </div>
+</div>
