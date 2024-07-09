@@ -1,14 +1,35 @@
 <div class="p-5">
-  <%= link_to "#",class:"flex justify-center flex-row w-full p-5" do %>
-    <%= image_tag @banner_image,class:"carousel-image w-3/4 shadow-2xl rounded-3xl border-2 border-gray-500" %>
-  <% end %>
+  <div class="relative">
+    <div id="carousel" class="h-[50vh] w-screen relative">
+      <div id="slide-container" class="flex transition-transform duration-300 ease-in-out">
+        <% @banners.each_with_index do |banner_image, index| %>
+          <div class="flex-shrink-0 w-screen">
+            <%= link_to "#", class: "flex justify-center" do %>
+              <%= image_tag banner_image, class: "h-[50vh] w-2/3 carousel-image shadow-2xl rounded-3xl border-2 border-gray-500" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+      <div id="dots" class="absolute bottom-4 flex justify-center w-full space-x-2">
+        <% @banners.length.times do |index| %>
+          <button class="h-3 w-3 rounded-full bg-gray-300"></button>
+        <% end %>
+      </div>
+    </div>
+    <button id="prevBtn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full z-10">
+      &#10094;
+    </button>
+    <button id="nextBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full z-10">
+      &#10095;
+    </button>
+  </div>
   <h1 class="text-3xl text-center mt-10">Popular Stores</h1>
   <div class="flex flex-row flex-wrap justify-center p-5 gap-10">
     <% if @stores %>
       <% @stores.each do |store| %>
         <%= link_to "#" do %>
           <div class="w-60 h-72 shadow-2xl bg-white rounded-lg">
-            <%= image_tag store.img_url,class:"w-full h-2/3 shadow-2xl p-2" %>
+            <%= image_tag store.img_url, class: "w-full h-2/3  shadow-2xl rounded-lg p-2" %>
             <div class="px-5 bg-white py-2">
               <p class="text-xl"><%= store.name[0,18] %></p>
               <span class="mt-2 inline-flex items-center rounded-md bg-blue-500 px-2 py-1 text-sm font-medium text-white ring-1 ring-inset ring-gray-500/10"><%= store.cashback %></span>
@@ -28,10 +49,10 @@
       <% @categories.each do |category| %>
         <%= link_to "#" do %>
           <div class="w-60 h-72 shadow-2xl bg-white rounded-lg">
-            <%= image_tag category.img_url,class:"w-full h-2/3 shadow-2xl p-2" %>
+            <%= image_tag category.img_url, class: "w-full h-2/3 shadow-2xl rounded-lg p-2" %>
             <div class="px-4 bg-white">
               <p class="text-xl"><%= category.name[0,18] + "..." %></p>
-              <p class="text-md  text-blue-500">Offers : <%= category.coupon_offers.count %></p>
+              <p class="text-md text-blue-500">Offers: <%= category.coupon_offers.count %></p>
             </div>
           </div>
         <% end %>
@@ -42,8 +63,8 @@
       </div>
     <% end %>
   </div>
-  <%= link_to "#",class:"flex justify-center flex-row w-full h-[20vh] mt-10" do %>
-    <%= image_tag "https://cashlelo.com/wp-content/uploads/2024/06/register.jpg",class:"rounded-3xl" %>
+  <%= link_to "#", class: "flex justify-center flex-row w-full h-[20vh] mt-10" do %>
+    <%= image_tag "https://cashlelo.com/wp-content/uploads/2024/06/register.jpg", class: "rounded-3xl object-cover" %>
   <% end %>
   <h1 class="text-3xl text-center mt-20">Popular Offers</h1>
   <div class="flex flex-row flex-wrap justify-center p-5 gap-10">
@@ -51,10 +72,10 @@
       <% @offers.each do |offer| %>
         <%= link_to "#" do %>
           <div class="w-80 h-80 shadow-2xl bg-white rounded-lg">
-            <%= image_tag offer.img_url,class:"w-full h-2/3 shadow-2xl p-2 rounded-lg" %>
+            <%= image_tag offer.img_url, class: "w-full h-2/3 shadow-2xl rounded-lg p-2" %>
             <div class="px-4 bg-white">
               <p class="text-xl"><%= offer.payout_cashback %></p>
-              <p class="text-sm text-blue-500"><%= offer.long_desc[0,100]+"..." %></p>
+              <p class="text-sm text-blue-500"><%= offer.long_desc[0,100] + "..." %></p>
             </div>
           </div>
         <% end %>
@@ -66,3 +87,43 @@
     <% end %>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const slideContainer = document.getElementById('slide-container');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dotsContainer = document.getElementById('dots');
+    const slides = slideContainer.children;
+    const dots = dotsContainer.children;
+    let currentIndex = 0;
+
+    function updateSlidePosition() {
+      slideContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+      updateActiveDot();
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateSlidePosition();
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      updateSlidePosition();
+    }
+
+    function updateActiveDot() {
+      for (let i = 0; i < dots.length; i++) {
+        dots[i].classList.remove('bg-blue-500');
+        dots[i].classList.add('bg-gray-300');
+      }
+      dots[currentIndex].classList.remove('bg-gray-300');
+      dots[currentIndex].classList.add('bg-blue-500');
+    }
+
+    nextBtn.addEventListener('click', nextSlide);
+    prevBtn.addEventListener('click', prevSlide);
+    setInterval(nextSlide, 3000);
+    updateActiveDot();
+  });
+</script>

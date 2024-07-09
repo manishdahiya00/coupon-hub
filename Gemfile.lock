@@ -124,14 +124,24 @@ GEM
       dry-logic (~> 1.4)
       zeitwerk (~> 2.6)
     erubi (1.13.0)
+    faraday (2.10.0)
+      faraday-net_http (>= 2.0, < 3.2)
+      logger
+    faraday-net_http (3.1.0)
+      net-http
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google_sign_in (1.2.1)
+      google-id-token (>= 1.4.0)
+      oauth2 (>= 1.4.0)
+      rails (>= 5.2.0)
     grape (2.1.2)
       activesupport (>= 6)
       dry-types (>= 1.1)
       mustermann-grape (~> 1.1.0)
       rack (>= 2)
       zeitwerk
+    hashie (5.0.0)
     http-accept (1.7.0)
     http-cookie (1.0.6)
       domain_name (~> 0.5)
@@ -167,12 +177,16 @@ GEM
     mini_mime (1.1.5)
     minitest (5.24.1)
     msgpack (1.7.2)
+    multi_xml (0.7.1)
+      bigdecimal (~> 3.1)
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     mustermann-grape (1.1.0)
       mustermann (>= 1.0.0)
     mutex_m (0.2.0)
     mysql2 (0.5.6)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.14)
       date
       net-protocol
@@ -196,6 +210,13 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.6-x86_64-linux)
       racc (~> 1.4)
+    oauth2 (2.0.9)
+      faraday (>= 0.17.3, < 3.0)
+      jwt (>= 1.0, < 3.0)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 4)
+      snaky_hash (~> 2.0)
+      version_gem (~> 1.1)
     psych (5.1.2)
       stringio
     public_suffix (6.0.0)
@@ -264,6 +285,9 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    snaky_hash (2.0.1)
+      hashie
+      version_gem (~> 1.1, >= 1.1.1)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -295,6 +319,8 @@ GEM
       railties (>= 6.0.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    uri (0.13.0)
+    version_gem (1.1.4)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -323,6 +349,7 @@ DEPENDENCIES
   capybara
   debug
   google-id-token!
+  google_sign_in (~> 1.2, >= 1.2.1)
   grape
   importmap-rails
   jbuilder

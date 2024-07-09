@@ -1,0 +1,2 @@
+class WebUser < ApplicationRecord
+end

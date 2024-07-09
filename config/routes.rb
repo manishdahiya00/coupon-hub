@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   root "client#index"
+  get "/google_login" => "auth#google_login"
+  get "/logout" => "auth#logout"
   get "/invite/:ref_code" => "client#invite"
   get "/admin/dashboard" => "admin/dashboard#index"
   get "/admin" => "admin/login#new"

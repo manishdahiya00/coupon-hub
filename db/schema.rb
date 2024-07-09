@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_09_061646) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_09_114926) do
   create_table "app_opens", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "source_ip"
@@ -146,6 +146,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_09_061646) do
     t.float "wallet_balance", default: 0.0
     t.datetime "last_check_in"
     t.string "phone"
+  end
+
+  create_table "web_users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "social_name"
+    t.string "social_email"
+    t.string "social_img_url"
+    t.string "social_token"
+    t.string "social_type"
+    t.string "source_ip"
+    t.string "security_token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "app_opens", "users"
