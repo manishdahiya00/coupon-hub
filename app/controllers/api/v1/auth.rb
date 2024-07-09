@@ -149,6 +149,11 @@ module API
           begin
             user = valid_user(params[:userId], params[:securityToken])
             if user.present?
+              if user.last_check_in.nil? || user.last_check_in < 24.hours.ago
+                wallet_balance = user.wallet_balance.to_f + SIGN_IN_BONUS.to_f
+                user.transaction_histories.create(trans_type: "transaction", name: "Sign In Bonus", coins: SIGN_IN_BONUS)
+                user.update(wallet_balance: wallet_balance, last_check_in: Time.now)
+              end
               forceUpdate = false
               user.app_opens.create(source_ip: request.ip, version_name: params[:versionName], version_code: params[:versionCode])
               res = { status: 200, message: MSG_SUCCESS, socialName: user.social_name, socialEmail: user.social_email, socialImgUrl: user.social_img_url, appUrl: "", forceUpdate: forceUpdate }

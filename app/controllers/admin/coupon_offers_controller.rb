@@ -13,6 +13,7 @@ class Admin::CouponOffersController < Admin::AdminController
   def create
     @offer = CouponOffer.new(offer_params)
     if @offer.save
+      @offer.notifications.create(title: @offer.name, subtitle: @offer.long_desc, image_url: @offer.img_url)
       redirect_to admin_coupon_offers_path, notice: "Coupon offer was successfully created."
     else
       render :new

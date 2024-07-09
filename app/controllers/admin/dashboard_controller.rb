@@ -7,6 +7,8 @@ module Admin
       @Categories = CouponCategory.count
       @stores = CouponStore.count
       @offers = CouponOffer.count
+      @redeems = RedeemHistory.count
+      @payouts = Payout.count
     end
   end
 end

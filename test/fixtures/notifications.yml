@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  subtitle: MyText
+  image_url: MyString
+  coupon_offer: one
+
+two:
+  title: MyString
+  subtitle: MyText
+  image_url: MyString
+  coupon_offer: two

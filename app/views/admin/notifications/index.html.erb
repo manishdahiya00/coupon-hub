@@ -1,0 +1,38 @@
+<!-- Page Content -->
+<div id="page-wrapper">
+  <div class="container-fluid">
+    <div class="row">
+      <p id="notice" style="color:orange;"><%= notice %></p>
+      <div class="col-lg-12">
+        <h2 class="page-header" style="margin: 10px 0 15px !important;">Listing Notifications</h2>
+      </div>
+      <% if @notifications.present? %>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Title</th>
+              <th>Subtitle</th>
+              <th>Coupon Offer Id</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @notifications.each do |notofication| %>
+              <tr>
+                <td><%= notofication.id %></td>
+                <td><%= notofication.title %></td>
+                <td><%= notofication.subtitle %></td>
+                <td><a href="/admin/coupon_offers/<%= notofication.coupon_offer.id  %>/edit"><%= notofication.coupon_offer.id %></a></td>
+                <td><%= notofication.created_at.strftime("%d/%m/%Y %I:%M %p") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @notifications %>
+      <% else %>
+        <h1 class="not-found">No  Notifications</h1>
+      <% end %>
+    </div>
+  </div>
+</div>

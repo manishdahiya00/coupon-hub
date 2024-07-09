@@ -8,16 +8,8 @@ class Admin::UsersController < Admin::AdminController
 
   def show
     @user = User.find(params[:id])
-  end
-
-  def payout
-    @redeem = Redeem.find(params[:id])
-    @user = User.find(@redeem.user_id)
-    if params[:secret] == "5555"
-      @redeem.update(status: "COMPLETED")
-      redirect_to admin_user_path(@user), notice: "Payout Successfull"
-    else
-      redirect_to admin_user_path(@user), notice: "Invalid Secret Code"
-    end
+    @appOpens = @user.app_opens.paginate(page: params[:page], per_page: 10).order(created_at: :desc)
+    @redeems = @user.redeem_histories.paginate(page: params[:page], per_page: 10).order(created_at: :desc)
+    @transactions = @user.transaction_histories.paginate(page: params[:page], per_page: 10).order(created_at: :desc)
   end
 end

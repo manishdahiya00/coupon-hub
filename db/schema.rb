@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_02_100356) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_09_061646) do
   create_table "app_opens", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "source_ip"
@@ -78,6 +78,47 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_02_100356) do
     t.index ["coupon_category_id"], name: "index_coupon_sub_categories_on_coupon_category_id"
   end
 
+  create_table "notifications", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "title"
+    t.text "subtitle"
+    t.string "image_url"
+    t.bigint "coupon_offer_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coupon_offer_id"], name: "index_notifications_on_coupon_offer_id"
+  end
+
+  create_table "payouts", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "payout_name"
+    t.string "payout_img_url"
+    t.string "payout_amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "redeem_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "upi_id"
+    t.float "coins"
+    t.string "phone"
+    t.string "amount"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "status", default: "PENDING"
+    t.string "payout_id"
+    t.index ["user_id"], name: "index_redeem_histories_on_user_id"
+  end
+
+  create_table "transaction_histories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.string "trans_type"
+    t.string "name"
+    t.string "coins", default: "0"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_transaction_histories_on_user_id"
+  end
+
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "device_id"
     t.string "device_type"
@@ -102,6 +143,9 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_02_100356) do
     t.string "security_token"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "wallet_balance", default: 0.0
+    t.datetime "last_check_in"
+    t.string "phone"
   end
 
   add_foreign_key "app_opens", "users"
@@ -110,4 +154,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_02_100356) do
   add_foreign_key "coupon_offers", "coupon_sub_categories"
   add_foreign_key "coupon_stores", "coupon_categories"
   add_foreign_key "coupon_sub_categories", "coupon_categories"
+  add_foreign_key "notifications", "coupon_offers"
+  add_foreign_key "redeem_histories", "users"
+  add_foreign_key "transaction_histories", "users"
 end

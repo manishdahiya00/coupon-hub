@@ -34,3 +34,5 @@ gem "grape"
 gem "rest-client"
 gem "google-id-token", git: "https://github.com/google/google-id-token.git"
 gem "will_paginate", "~> 4.0"
+
+gem "tailwindcss-rails", "~> 2.6"

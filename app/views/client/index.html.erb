@@ -1,0 +1,68 @@
+<div class="p-5">
+  <%= link_to "#",class:"flex justify-center flex-row w-full p-5" do %>
+    <%= image_tag @banner_image,class:"carousel-image w-3/4 shadow-2xl rounded-3xl border-2 border-gray-500" %>
+  <% end %>
+  <h1 class="text-3xl text-center mt-10">Popular Stores</h1>
+  <div class="flex flex-row flex-wrap justify-center p-5 gap-10">
+    <% if @stores %>
+      <% @stores.each do |store| %>
+        <%= link_to "#" do %>
+          <div class="w-60 h-72 shadow-2xl bg-white rounded-lg">
+            <%= image_tag store.img_url,class:"w-full h-2/3 shadow-2xl p-2" %>
+            <div class="px-5 bg-white py-2">
+              <p class="text-xl"><%= store.name[0,18] %></p>
+              <span class="mt-2 inline-flex items-center rounded-md bg-blue-500 px-2 py-1 text-sm font-medium text-white ring-1 ring-inset ring-gray-500/10"><%= store.cashback %></span>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <div class="flex flex-row justify-center">
+        <h1>No Stores Found</h1>
+      </div>
+    <% end %>
+  </div>
+  <h1 class="text-3xl text-center mt-20">Popular Categories</h1>
+  <div class="flex flex-row flex-wrap justify-center p-5 gap-10">
+    <% if @categories %>
+      <% @categories.each do |category| %>
+        <%= link_to "#" do %>
+          <div class="w-60 h-72 shadow-2xl bg-white rounded-lg">
+            <%= image_tag category.img_url,class:"w-full h-2/3 shadow-2xl p-2" %>
+            <div class="px-4 bg-white">
+              <p class="text-xl"><%= category.name[0,18] + "..." %></p>
+              <p class="text-md  text-blue-500">Offers : <%= category.coupon_offers.count %></p>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <div class="flex flex-row justify-center">
+        <h1>No Category Found</h1>
+      </div>
+    <% end %>
+  </div>
+  <%= link_to "#",class:"flex justify-center flex-row w-full h-[20vh] mt-10" do %>
+    <%= image_tag "https://cashlelo.com/wp-content/uploads/2024/06/register.jpg",class:"rounded-3xl" %>
+  <% end %>
+  <h1 class="text-3xl text-center mt-20">Popular Offers</h1>
+  <div class="flex flex-row flex-wrap justify-center p-5 gap-10">
+    <% if @offers %>
+      <% @offers.each do |offer| %>
+        <%= link_to "#" do %>
+          <div class="w-80 h-80 shadow-2xl bg-white rounded-lg">
+            <%= image_tag offer.img_url,class:"w-full h-2/3 shadow-2xl p-2 rounded-lg" %>
+            <div class="px-4 bg-white">
+              <p class="text-xl"><%= offer.payout_cashback %></p>
+              <p class="text-sm text-blue-500"><%= offer.long_desc[0,100]+"..." %></p>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% else %>
+      <div class="flex flex-row justify-center">
+        <h1>No Offers Found</h1>
+      </div>
+    <% end %>
+  </div>
+</div>

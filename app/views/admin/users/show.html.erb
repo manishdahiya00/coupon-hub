@@ -16,6 +16,7 @@
             <th>Device Type</th>
             <th>Device Name</th>
             <th>Social Type</th>
+            <th>Social Id</th>
           </tr>
         </thead>
         <tbody>
@@ -25,26 +26,29 @@
             <td><%= @user.device_type %></td>
             <td><%= @user.device_name %></td>
             <td><%= @user.social_type %></td>
+            <td><%= @user.social_id %></td>
           </tr>
         </tbody>
       </table>
       <table class="table table-responsive table-bordered">
         <thead>
           <tr>
-            <th>Social Id</th>
             <th>Social Name</th>
             <th>Social Email</th>
+            <th>Phone Number</th>
             <th>Social Image</th>
             <th>Ad Id</th>
+            <th>Last Check In</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><%= @user.social_id %></td>
-            <td><%= @user.social_email %></td>
             <td><%= @user.social_name %></td>
+            <td><%= @user.social_email %></td>
+            <td><%= @user.phone %></td>
             <td><img style="width:20px;" src="<%=@user.try(:social_img_url)%>" onerror="this.onerror=null;this.src='https://cdn.pixabay.com/photo/2014/03/24/17/21/wrong-295503_640.png';" /></td>
             <td><%= @user.advertising_id %></td>
+            <td><%= @user.last_check_in %></td>
           </tr>
         </tbody>
       </table>
@@ -77,6 +81,7 @@
             <th>Refer Code</th>
             <th>Source Ip</th>
             <th>Security Token</th>
+            <th>Wallet Balance</th>
           </tr>
         </thead>
         <tbody>
@@ -85,9 +90,126 @@
             <td><%= @user.refer_code %></td>
             <td><%= @user.source_ip %></td>
             <td><%= @user.security_token %></td>
+            <td><%= @user.wallet_balance %></td>
           </tr>
         </tbody>
       </table>
+      <h3>App Opens</h3>
+      <% if @appOpens.any? %>
+        <table class="table table-responsive table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Source IP</th>
+              <th>Created At</th>
+              <th>Updated At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @appOpens.each do |appOpen| %>
+              <tr>
+                <td><%= appOpen.id %></td>
+                <td><%= appOpen.source_ip %></td>
+                <td><%= appOpen.created_at.strftime("%d/%m/%y %I:%M %p") %></td>
+                <td><%= appOpen.updated_at.strftime("%d/%m/%y %I:%M %p") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @appOpens %>
+      <% else %>
+        <h3>No App Opens Found</h3>
+      <% end %>
+      <h3>Redeem Histories</h3>
+      <% if @redeems.any? %>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Phone Number</th>
+              <th>UPI Id</th>
+              <th>Coins</th>
+              <th>Amount</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @redeems.each do |redeem| %>
+              <tr>
+                <td><%= redeem.id %></td>
+                <td><%= redeem.phone %></td>
+                <td><%= redeem.upi_id %></td>
+                <td><%= redeem.coins %></td>
+                <td><%= redeem.amount %></td>
+                <td class="fs-5">
+                  <% unless redeem.status == "COMPLETED" %>
+                    <div class="btn btn-primary" data-toggle="modal" data-target="#exampleModal<%= redeem.id %>">Payout</div>
+                    <div class="modal fade" id="exampleModal<%= redeem.id %>" tabindex="-1" aria-labelledby="exampleModalLabel<%= redeem.id %>" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel<%= redeem.id %>">Payout</h1>
+                          </div>
+                          <div class="modal-body">
+                            <%= form_with(model: @redeem, url: admin_payout_user_path(redeem), method: :post) do |f| %>
+                              <%= f.hidden_field :id, value: redeem.id, class: "form-control" %>
+                              <div class="mb-3">
+                                <%= f.label :amount, class: "form-label" %>
+                                <%= f.text_field :amount, class: "form-control", title: "Please enter the amount", required: true %>
+                              </div>
+                              <div class="mb-3">
+                                <%= f.label :secret, class: "form-label" %>
+                                <%= f.text_field :secret, class: "form-control", required: true %>
+                              </div>
+                              <%= submit_tag "Payout", class: "btn btn-primary" %>
+                            <% end %>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% else %>
+                    <p style="color:Green;">PAYOUT SUCCESSFULL !!</p>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @redeems %>
+      <% else %>
+        <h3>No Redeems Found</h3>
+      <% end %>
+      <h3>Transaction Histories</h3>
+      <% if @transactions.any? %>
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Transaction Type</th>
+              <th>Name</th>
+              <th>Coins</th>
+              <th>Created At</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @transactions.each do |transaction| %>
+              <tr>
+                <td><%= transaction.id %></td>
+                <td><%= transaction.trans_type %></td>
+                <td><%= transaction.name %></td>
+                <td><%= transaction.coins %></td>
+                <td><%= transaction.created_at.strftime("%d/%m/%Y %I:%M %p") %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= will_paginate @redeems %>
+      <% else %>
+        <h3>No Transactions Found</h3>
+      <% end %>
     </div>
   </div>
 </div>

@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  upi_id: MyString
+  coins: 1.5
+  phone: MyString
+  amount: 1
+  user: one
+
+two:
+  upi_id: MyString
+  coins: 1.5
+  phone: MyString
+  amount: 1
+  user: two

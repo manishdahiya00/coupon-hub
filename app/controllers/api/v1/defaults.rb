@@ -5,6 +5,8 @@ module API
 
       MSG_SUCCESS = "Success"
       MSG_ERROR = "Error"
+      BASE_URL = "https://couponstudio.app"
+      SIGN_IN_BONUS = "0.5"
 
       def self.included(base)
         base.prefix :api

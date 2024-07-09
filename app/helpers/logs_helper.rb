@@ -4,6 +4,7 @@ module LogsHelper
     SQLLogger.clear
     message = {
       current_time: DateTime.now.strftime("%dth, %b %Y %I:%M %p"),
+      ip_addr: request.ip,
       http_method: request.request_method,
       post_method: request.GET,
       files_attachment: request.body.read,

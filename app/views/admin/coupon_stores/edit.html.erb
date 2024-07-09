@@ -5,7 +5,7 @@
         <h2 class="page-header">Edit Store</h2>
       </div>
       <div class="col-lg-6">
-        <%= form_with(model: @store, url: admin_coupon_stores_path) do |form| %>
+        <%= form_with(model: @store, url: admin_coupon_store_path) do |form| %>
           <div class="form-group">
             <%= form.label :coupon_category_id %>
             <%= form.select :coupon_category_id, options_for_select(CouponCategory.all.pluck(:name, :id), @store.coupon_category_id), {}, class: 'form-control' %>
