@@ -1,0 +1,102 @@
+<div class="relative mt-5 p-3 overflow-hidden">
+  <div id="carousel" class="h-[50vh] w-full relative">
+    <div id="slide-container" class="flex transition-transform duration-500 ease-in-out">
+      <% banners.each do |banner_image| %>
+        <div class="flex-shrink-0 w-full">
+          <%= link_to "#", class: "flex justify-center" do %>
+            <%= image_tag banner_image, class: "h-[50vh] mx-5 w-full object-cover carousel-image shadow-lg rounded-xl" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div id="dots" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      <% banners.length.times do |i| %>
+        <button class="h-3 w-3 rounded-full bg-white bg-opacity-50 transition-all duration-300 focus:outline-none" data-index="<%= i %>"></button>
+      <% end %>
+    </div>
+  </div>
+  <button id="prevBtn" class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full shadow-md transition-all duration-300 hover:bg-opacity-75 focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+    </svg>
+  </button>
+  <button id="nextBtn" class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full shadow-md transition-all duration-300 hover:bg-opacity-75 focus:outline-none">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+    </svg>
+  </button>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const slideContainer = document.getElementById('slide-container');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const dotsContainer = document.getElementById('dots');
+    const slides = slideContainer.children;
+    const dots = dotsContainer.children;
+    let currentIndex = 0;
+    let intervalId;
+
+    function updateSlidePosition() {
+      slideContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+      updateActiveDot();
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % slides.length;
+      updateSlidePosition();
+    }
+
+    function prevSlide() {
+      currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+      updateSlidePosition();
+    }
+
+    function updateActiveDot() {
+      for (let i = 0; i < dots.length; i++) {
+        if (i === currentIndex) {
+          dots[i].classList.add('bg-blue-500', 'w-6');
+          dots[i].classList.remove('bg-white', 'bg-opacity-50');
+        } else {
+          dots[i].classList.remove('bg-blue-500', 'w-6');
+          dots[i].classList.add('bg-white', 'bg-opacity-50');
+        }
+      }
+    }
+
+    function startAutoSlide() {
+      intervalId = setInterval(nextSlide, 5000);
+    }
+
+    function stopAutoSlide() {
+      clearInterval(intervalId);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      nextSlide();
+      stopAutoSlide();
+      startAutoSlide();
+    });
+
+    prevBtn.addEventListener('click', () => {
+      prevSlide();
+      stopAutoSlide();
+      startAutoSlide();
+    });
+
+    dotsContainer.addEventListener('click', (e) => {
+      if (e.target.matches('button')) {
+        currentIndex = parseInt(e.target.getAttribute('data-index'));
+        updateSlidePosition();
+        stopAutoSlide();
+        startAutoSlide();
+      }
+    });
+
+    slideContainer.addEventListener('mouseenter', stopAutoSlide);
+    slideContainer.addEventListener('mouseleave', startAutoSlide);
+
+    updateActiveDot();
+    startAutoSlide();
+  });
+</script>

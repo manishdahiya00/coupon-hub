@@ -1,0 +1,42 @@
+<div class="bg-gradient-to-b from-yellow-600 via-yellow-400 to-white min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden mb-12">
+    <div class="md:flex items-center">
+      <div class="md:flex-shrink-0">
+        <%= image_tag @store.img_url, class: "h-48 w-full object-cover md:w-48 ms-5 shadow-2xl rounded-xl" %>
+      </div>
+      <div class="p-8">
+        <h1 class="text-4xl font-bold text-gray-900 mb-2"><%= @store.name %></h1>
+        <div class="text-2xl font-semibold text-red-500 mb-4"><%= @store.cashback %></div>
+        <%= link_to "Visit Website", @store.action_url, class: "mt-4 inline-block px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-red-500 hover:bg-red-600 transition duration-150 ease-in-out" %>
+      </div>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Available Offers</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <% if @offers.present? %>
+        <% @offers.each do |offer| %>
+          <div class="bg-white rounded-xl overflow-hidden shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl">
+            <div class="relative pb-48 overflow-hidden">
+              <%= image_tag offer.img_url, class: "absolute inset-0 h-full w-full object-cover" %>
+            </div>
+            <div class="p-6">
+              <div class="text-xl font-semibold text-red-500 mb-2"><%= offer.payout_cashback %></div>
+              <p class="text-gray-600 text-sm mb-4"><%= truncate(offer.long_desc, length: 100) %></p>
+              <div class="flex justify-between items-center">
+                <%= link_to "View Offer", offer_path(offer), class: "text-yellow-600 hover:text-yellow-700 font-medium" %>
+                <% if offer.expiry_date %>
+                  <span class="text-sm text-gray-500"><%= offer.expiry_date.strftime("%B %d, %Y") %></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="col-span-full text-center text-gray-600 py-12">
+          <p class="text-xl">No offers available at the moment.</p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

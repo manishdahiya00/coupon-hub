@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_07_09_114926) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_10_074416) do
   create_table "app_opens", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "source_ip"
@@ -45,7 +45,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_09_114926) do
     t.string "offer_type"
     t.string "img_url"
     t.string "action_url"
-    t.string "hindi_desc"
+    t.text "hindi_desc"
     t.string "currency"
     t.string "priority"
     t.string "code_show_text"

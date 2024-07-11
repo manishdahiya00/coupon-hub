@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CouponHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gradient-to-b from-yellow-600 via-yellow-400 to-white">
+    <p class="bg-red-500 text-white text-center w-screen">
+      <%= alert %>
+    </p>
+    <%= render partial: 'shared/navbar', locals: { user: @user } %>
+    <%= yield %>
+    <%= render partial: 'shared/footer' %>
+  </body>
+</html>
