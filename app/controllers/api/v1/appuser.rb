@@ -403,6 +403,44 @@ module API
         end
       end
 
+      resource :offerClicked do
+        before { api_params }
+
+        params do
+          use :common_params
+          requires :offerId, type: String, allow_blank: false
+        end
+
+        post do
+          begin
+            user = valid_user(params[:userId], params[:securityToken])
+            if user.present?
+              coupon_offer = CouponOffer.find(params["offerId"].to_i)
+              offer_action_url = coupon_offer.action_url
+
+              if (offer_action_url.include? "{clk-id}") || (offer_action_url.include? "{ga-id}")
+                uuid = SecureRandom.uuid
+                uuid = uuid.insert(-1, "-#{coupon_offer.id}-#{user.id}")
+                offer_action_url = offer_action_url.gsub("{clk-id}", "#{uuid}") if offer_action_url.include? "{clk-id}"
+                offer_action_url = offer_action_url.gsub("{ga-id}", "#{user.advertising_id}") if offer_action_url.include? "{ga-id}"
+              end
+              res = { status: 200, message: MSG_SUCCESS, actionType: "web", actionUrl: offer_action_url }
+              LogsHelper.logs(res, request)
+              return res
+            else
+              res = { status: 500, message: "User Not Found" }
+              LogsHelper.logs(res, request)
+              return res
+            end
+          rescue Exception => e
+            log = "API Exception - #{Time.now} - offer Clicked - #{params.inspect} - Error - #{e}"
+            Rails.logger.info log
+            LogsHelper.logs(log, request)
+            { status: 200, message: MSG_ERROR, error: e }
+          end
+        end
+      end
+
       resource :updateProfile do
         before { api_params }
 
