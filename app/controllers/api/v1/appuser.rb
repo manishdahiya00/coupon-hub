@@ -19,14 +19,14 @@ module API
               topStores = []
               specialOffer = {}
               topOffers = []
-              CouponCategory.active.each do |category|
+              CouponCategory.active.limit(10).each do |category|
                 topCategories << {
                   id: category.id,
                   title: category.name,
                   image: category.img_url,
                 }
               end
-              CouponStore.active.each do |store|
+              CouponStore.active.limit(10).each do |store|
                 topStores << {
                   id: store.id,
                   image: store.img_url,
@@ -35,7 +35,7 @@ module API
                   status: "Activate Cashback",
                 }
               end
-              CouponOffer.active.each do |offer|
+              CouponOffer.active.limit(10).each do |offer|
                 appBanners << {
                   id: offer.id,
                   image: offer.img_url,
@@ -574,8 +574,8 @@ module API
             if user.present?
               withdrawls = []
               transactions = []
-              withdrawlHistory = user.transaction_histories.where(trans_type: "withdrawl").limit(10)
-              transactionHistory = user.transaction_histories.where(trans_type: "transaction").limit(10)
+              withdrawlHistory = user.transaction_histories.order(created_at: :desc).where(trans_type: "withdrawl").limit(10)
+              transactionHistory = user.transaction_histories.order(Created_at: :desc).where(trans_type: "transaction").limit(10)
               withdrawlHistory.each do |withdrawl|
                 withdrawls << {
                   title: withdrawl.name,
