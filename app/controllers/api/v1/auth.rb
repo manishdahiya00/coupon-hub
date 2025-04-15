@@ -113,16 +113,17 @@ module API
         post do
           begin
             ip_addr = request.ip
-            if params[:email] == "testingyash8@gmail.com" && params[:password] == "yash@123"
+            #if params[:email] == "testingyash8@gmail.com" && params[:password] == "yash@123"
+            if params[:email].present?            
               user = User.find_by(social_email: params[:email])
               if user.present?
                 res = { message: MSG_SUCCESS, status: 200, userId: user.id, securityToken: user.security_token }
                 LogsHelper.logs(res, request)
                 return res
               else
-                new_user = User.create(social_name: "Testing Yash", social_email: params[:email], security_token: "acc7106fe5009609", source_ip: ip_addr, refer_code: SecureRandom.hex(6).upcase, social_img_url: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png")
-                res = { message: MSG_SUCCESS, status: 200, userId: new_user.id, securityToken: new_user.security_token }
-                logs(res)
+                #new_user = User.create(social_name: "Testing Yash", social_email: params[:email], security_token: "acc7106fe5009609", source_ip: ip_addr, refer_code: SecureRandom.hex(6).upcase, social_img_url: "https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png")
+                res = { message: 'User Not Found', status: 500 }
+                LogsHelper.logs(res, request)
                 return res
               end
             else
